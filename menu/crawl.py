@@ -25,6 +25,10 @@ def menu_handler(meals, date, restaurant_name, type):
     menu.save()
 
 
+def crawl_snu():
+    crawl_snuco()
+
+
 def crawl_snuco():
     SNUCO = "http://snuco.snu.ac.kr/ko/foodmenu"
     SNUCO_html = urlopen(SNUCO).read()
@@ -38,7 +42,7 @@ def crawl_snuco():
     re_menu_name = re.compile(r'([ㄱ-ㅣ가-힇a-zA-Z&()#;]*)\s+([0-9]{1,2},[0-9]{3})')
     restaurant = ""
     meals = []
-    meal_types = ['breakfast', 'lunch', 'dinner']
+    meal_types = {'breakfast': 'BR', 'lunch': 'LU', 'dinner': 'DN'}
 
     for menu_or_restaurant in menu_text:
         menu_or_restaurant_str = str(menu_or_restaurant)
@@ -49,11 +53,17 @@ def crawl_snuco():
             for meal_type in meal_types:
                 if re.search(meal_type, menu_or_restaurant_str):
                     break  # 찾지 못하는 경우가 존재하나?
-            # meal_handler(v.group(1),v.group(2),restaurant)
-            # print(v)
             v = re_menu_name.search(menu_or_restaurant_str)
             while v is not None:
-                # meal_handler(v.group(1), int(re.sub(',', '', v.group(2))), restaurant)
-                print(v.group(1), int(re.sub(',', '', v.group(2))), restaurant)
+                '''
+                meal_name = v.group(1)
+                price = int(re.sub(',', '', v.group(2)))
+                meal_handler(meal_name, price, restaurant)
+                meal = Meal.objects.get(kr_name = meal_name, restaurant= Restaurant.objects.get(kr_name=restaurant))
+                meals.append(meal)
+                menu_handler(meals, datetime.today(), restaurant, meal_types[meal_type])
+                '''
+
+                # print(v.group(1), int(re.sub(',', '', v.group(2))), restaurant)
                 menu_or_restaurant_str = re_menu_name.sub(' ', menu_or_restaurant_str, count=1)
                 v = re_menu_name.search(menu_or_restaurant_str)
