@@ -35,7 +35,7 @@ def crawl_snuco():
     SNUCOBS = BeautifulSoup(SNUCO_html, "html.parser")
     restaurant_list = []
     for restaurant in SNUCOBS.find_all("td", class_="views-field-field-restaurant"):
-        restaurant_list += re.findall('[ㄱ-ㅣ가-힇]+', restaurant.text)
+        restaurant_list += re.findall('[0-9]*[ㄱ-ㅣ가-힇]+', restaurant.text)
     # print(restaurant_list)
 
     menu_text = SNUCOBS.find_all("td", class_="views-field")
@@ -43,11 +43,14 @@ def crawl_snuco():
     restaurant = ""
     meals = []
     meal_types = {'breakfast': 'BR', 'lunch': 'LU', 'dinner': 'DN'}
-
+    print(menu_text)
     for menu_or_restaurant in menu_text:
         menu_or_restaurant_str = str(menu_or_restaurant)
-        if menu_or_restaurant_str in restaurant_list:
-            restaurant = menu_or_restaurant_str
+        restaurant_or_none = re.search("[0-9]*[ㄱ-ㅣ가-힇]+", menu_or_restaurant_str)
+        if restaurant_or_none:
+            restaurant_or_none = restaurant_or_none.group()
+        if restaurant_or_none in restaurant_list:
+            restaurant = restaurant_or_none
             continue
         else:
             for meal_type in meal_types:

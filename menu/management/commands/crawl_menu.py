@@ -11,4 +11,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         crawl_snu()
-
+        self.stdout.write(self.style.SUCCESS('Success'))

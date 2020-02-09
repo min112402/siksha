@@ -38,7 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'menu.apps.MenuConfig',
-    'rest_framework'
+    'rest_framework',
+    'django_crontab'
+]
+
+CRONJOBS = [
+    ('0 * 3,10,16,18 * * ? *', 'menu.cron.crawl_menu_cron', '>>log_file.log')
 ]
 
 REST_FRAMEWORK ={
