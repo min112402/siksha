@@ -64,6 +64,6 @@ def crawl_snuco():
                 menu_handler(meals, datetime.today(), restaurant, meal_types[meal_type])
                 '''
 
-                # print(v.group(1), int(re.sub(',', '', v.group(2))), restaurant)
+                print(v.group(1), int(re.sub(',', '', v.group(2))), restaurant)
                 menu_or_restaurant_str = re_menu_name.sub(' ', menu_or_restaurant_str, count=1)
                 v = re_menu_name.search(menu_or_restaurant_str)
